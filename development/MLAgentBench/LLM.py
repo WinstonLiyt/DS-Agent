@@ -36,7 +36,7 @@ def complete_text_openai(prompt, model="gpt-3.5-turbo", max_tokens_to_sample=100
     """ Call the OpenAI API to complete a prompt using the new API format."""
     raw_request = {
         "model": model,
-        "messages": [prompt],
+        "messages": [{"role": "user", "content": prompt}],
         "temperature": temperature,
         "max_tokens": max_tokens_to_sample,
         **kwargs
@@ -70,7 +70,7 @@ def complete_text_fast(prompt, **kwargs):
     return complete_text(prompt = prompt, model ="gpt-4o", temperature =0.01, **kwargs)
 
 # response = complete_text_openai(
-#     prompt={'role': 'user', 'content': 'What is the capital of France?'},
+#     prompt='What is the capital of France?',
 #     model="gpt-4o",
 #     max_tokens_to_sample=200
 # )
