@@ -29,6 +29,25 @@ try:
 except Exception as e:
     print(e)
     print("Could not load anthropic API key claude_api_key.txt.")
+
+try:
+    from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+except ImportError:
+    print("azure.identity is not installed.")
+
+
+chat_api_base = "https://msraopenaieastus.openai.azure.com/"
+chat_api_version = "2024-05-01-preview"
+credential = DefaultAzureCredential()
+token_provider = get_bearer_token_provider(
+                        credential,
+                        "https://cognitiveservices.azure.com/.default",
+                    )
+chat_client = openai.AzureOpenAI(
+    azure_ad_token_provider=token_provider,
+    api_version=chat_api_version,
+    azure_endpoint=chat_api_base,
+)
     
 try:
     import openai
