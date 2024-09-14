@@ -20,7 +20,8 @@ from dacite import from_dict
 from .low_level_actions import LOW_LEVEL_ACTIONS
 from .high_level_actions import HIGH_LEVEL_ACTIONS
 from .schema import Step, Trace, EnvException, TooLongPromptError, LLMError, EnhancedJSONEncoder 
-from .LLM import complete_text_claude
+# from .LLM import complete_text_claude
+from .LLM import complete_text_openai
 from .prepare_task import prepare_task, get_task_info
 
 class TimeoutException(Exception): pass
@@ -37,7 +38,7 @@ The name should be short and valid as a folder name, e.g. "my_research_problem".
 [research problem name]: my_research_problem [end]
 
 """
-    response = complete_text_claude(prompt, stop_sequences=["[end]"], log_file=log_file)
+    response = complete_text_openai(prompt, stop_sequences=["[end]"], log_file=log_file)
     benchmark_folder_name = response.split("[research problem name]: ")[-1].split(" [end]")[0]
     return benchmark_folder_name
 

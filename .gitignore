@@ -1,2 +1,10 @@
 *.egg-info/
 .vscode/
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+benchmarks/
+logs/
+workspace/
