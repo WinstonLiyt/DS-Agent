@@ -45,3 +45,8 @@ evaluate
 cchardet
 pytest
 dacite
+tiktoken
+azure-mgmt-compute
+azure-mgmt-storage
+azure-keyvault-secrets
+azure-identity
