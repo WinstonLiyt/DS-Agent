@@ -6,9 +6,16 @@ import anthropic
 import tiktoken
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from prompt import get_prompt
+try:
+    from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+except ImportError:
+    print("Azure SDK is not installed. Please install it by running 'pip install azure-identity'")
 
-openai.api_key = "FILL IN YOUR KEY HERE."
-# openai.api_base = "http://localhost:8000/v1"
+try:
+    import openai
+except ImportError:
+    print("OpenAI SDK is not installed. Please install it by running 'pip install openai'")
+
 enc = tiktoken.get_encoding("cl100k_base")
 
 DEVELOPMENT_TASKS = ["feedback", "airline-reviews", "textual-entailment", "chatgpt-prompt", "ett-m2", "ili", "handwriting", "ethanol-concentration", "media-campaign-cost", "wild-blueberry-yield", "spaceship-titanic", "enzyme-substrate"]
@@ -44,7 +51,7 @@ def generation(prompt, llm, temperature=0.7, log_file=None):
     while iteration < 50:
         try:
             messages = [{"role": "user", "content": prompt}]
-            response = openai.ChatCompletion.create(**{"messages": messages,**raw_request})
+            response = chat_client.chat.completions.create(**{"messages": messages,**raw_request})
             raw_completion = response["choices"][0]["message"]["content"]
             completion = raw_completion.split("```python")[1].split("```")[0]
             if not completion.strip(" \n"):
@@ -77,6 +84,20 @@ def log_to_file(log_file, prompt, completion):
 
 
 if __name__ == '__main__':
+    # Use Azure token provider
+    dac_kwargs = {}
+    credential = DefaultAzureCredential(**dac_kwargs)
+    token_provider = get_bearer_token_provider(
+        credential,
+        "https://cognitiveservices.azure.com/.default",
+    )
+    chat_client = openai.AzureOpenAI(
+        azure_ad_token_provider=token_provider,
+        api_version='2024-05-01-preview',
+        azure_endpoint='https://msraopenaisouthcentralus.openai.azure.com/',
+    )
+
+
     args = get_args()
     
     # Load Model

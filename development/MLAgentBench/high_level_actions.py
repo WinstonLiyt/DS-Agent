@@ -28,9 +28,9 @@ def reflection(things_to_reflect_on, work_dir = ".", research_problem = "", **kw
 def plan_experiment_design_cbr(experiment_log, **kwargs):
     research_problem = kwargs["research_problem"]
     retrieval_database = RetrievalDatabase([
-           "../data/nlp_cases",
-           "../data/tsa_cases",
-           "../data/tabular_cases",
+           "./data/nlp_cases",
+           "./data/tsa_cases",
+           "./data/tabular_cases",
         ],
         model="BAAI/llm-embedder",
     )
